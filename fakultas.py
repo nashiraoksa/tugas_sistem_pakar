@@ -34,17 +34,6 @@ template.assert_fact(nama='Kedokteran, Kesehatan Masyarakat, dan Keperawatan',ta
 template.assert_fact(nama='Kedokteran Gigi',tahun_berdiri=1948,jumlah_prodi=3, klaster='Kesehatan')
 template.assert_fact(nama='Farmasi',tahun_berdiri=1946,jumlah_prodi=6, klaster='Kesehatan')
 
-fakultasDict = []
-
-for fact in env.facts():
-    fakultasDict.append({
-       "nama": fact['nama'],
-       "tahun": fact['tahun_berdiri'],
-       "prodi": fact['jumlah_prodi'],
-       "klaster": fact['klaster']
-       })
-
-
 # ====== RULES ======
 RULES = [ 
    """
@@ -76,6 +65,9 @@ RULES = [
 for rule in RULES:
    env.build(rule)
 
+print('\n=== PENENTUAN KLASTER TIAP FAKULTAS ===')
+env.run()
+
 # ====== FUNCTIONS ======
 def older_faculty(n1, n2, t1, t2):
     if t1 > t2:
@@ -102,27 +94,19 @@ env.define_function(older_faculty)
 env.define_function(program)
 env.define_function(umur_fakultas)
 
+print('\n=== MEMBANDINGKAN FAKULTAS YANG LEBIH TUA ===')
 env.eval('(older_faculty "Biologi" "Filsafat" 1955 1967)')
 env.eval('(older_faculty "Kehutanan" "Farmasi" 1963 1946)')
 env.eval('(older_faculty "Hukum" "Ilmu Budaya" 1946 1946)')
 
+print('\n=== MEMBANDINGKAN JUMLAH PROGRAM STUDI ===')
 env.eval('(program "Geografi" "Biologi" 3 3)')
 env.eval('(program "Peternakan" "Ilmu Sosial dan Ilmu Politik" 4 17)')
 env.eval('(program "Ekonomika dan Bisnis" "Teknologi Pertanian" 14 10)')
 
+print('\n=== MENGHITUNG UMUR FAKULTAS ===')
 env.eval('(umur_fakultas "Kedokteran Hewan" 1949)')
 env.eval('(umur_fakultas "Matematika dan Ilmu Pengetahuan Alam" 1955)')
 env.eval('(umur_fakultas "Kedokteran, Kesehatan Masyarakat, dan Keperawatan" 1946)')
 env.eval('(umur_fakultas "Filsafat" 1967)')
 env.eval('(umur_fakultas "Kedokteran Gigi" 1948)')
-
-
-# !! <Percobaan dengan value yang diambil dari dictionary>
-# older_faculty(fakultasDict[0]['nama'], fakultasDict[1]['nama'], fakultasDict[0]['tahun'], fakultasDict[1]['tahun']) #salah?:(
-
-# !! <Percobaan dengan sintaks 'find-fact', belum berhasil>
-# env.eval('(umur_fakultas (find-fact ((?f fakultas))(eq ?f:nama "Farmasi")))')
-
-env.run()
-
-# env.eval('(printout t "Hello World!" crlf)')

@@ -1,0 +1,1 @@
+(find-fact ((?f fakultas))(eq ?f:nama "Farmasi"))

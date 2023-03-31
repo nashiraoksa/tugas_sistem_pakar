@@ -79,14 +79,49 @@ for rule in RULES:
 # ====== FUNCTIONS ======
 def older_faculty(n1, n2, t1, t2):
     if t1 > t2:
-        print(n2, " lebih tua")
+        print("Fakultas",n2,"lebih tua daripada Fakultas",n1)
+    elif t1 < t2:
+        print("Fakultas",n1,"lebih tua daripada Fakultas",n2)
     else:
-        print(n1, " lebih tua")
+        print("Fakultas",n1,"dan",n2,"berdiri pada tahun yang sama")
+
+def program(fakultas1, fakultas2, j_prodi1, j_prodi2):
+    if j_prodi1 > j_prodi2:
+        print("Fakultas",fakultas1, "memiliki lebih banyak program studi daripada Fakultas",fakultas2)
+    elif j_prodi1 < j_prodi2:
+        print("Fakultas",fakultas2, "memiliki lebih banyak program studi daripada Fakultas",fakultas1)
+    else:
+        print("Jumlah program studi Fakultas",fakultas1,"dan Fakultas",fakultas2,"sama")
+
+
+def umur_fakultas(n_fakultas, t_berdiri):
+    umur = 2023 - t_berdiri
+    print("Fakultas",n_fakultas,"telah berumur", umur, "tahun")
 
 env.define_function(older_faculty)
-env.eval('(older_faculty "Kedokteran Hewan" "ASHKDAHS" 1946 1955)')
+env.define_function(program)
+env.define_function(umur_fakultas)
 
-older_faculty(fakultasDict[0]['nama'], fakultasDict[1]['nama'], fakultasDict[0]['tahun'], fakultasDict[1]['tahun']) #salah?:(
+env.eval('(older_faculty "Biologi" "Filsafat" 1955 1967)')
+env.eval('(older_faculty "Kehutanan" "Farmasi" 1963 1946)')
+env.eval('(older_faculty "Hukum" "Ilmu Budaya" 1946 1946)')
+
+env.eval('(program "Geografi" "Biologi" 3 3)')
+env.eval('(program "Peternakan" "Ilmu Sosial dan Ilmu Politik" 4 17)')
+env.eval('(program "Ekonomika dan Bisnis" "Teknologi Pertanian" 14 10)')
+
+env.eval('(umur_fakultas "Kedokteran Hewan" 1949)')
+env.eval('(umur_fakultas "Matematika dan Ilmu Pengetahuan Alam" 1955)')
+env.eval('(umur_fakultas "Kedokteran, Kesehatan Masyarakat, dan Keperawatan" 1946)')
+env.eval('(umur_fakultas "Filsafat" 1967)')
+env.eval('(umur_fakultas "Kedokteran Gigi" 1948)')
+
+
+# !! <Percobaan dengan value yang diambil dari dictionary>
+# older_faculty(fakultasDict[0]['nama'], fakultasDict[1]['nama'], fakultasDict[0]['tahun'], fakultasDict[1]['tahun']) #salah?:(
+
+# !! <Percobaan dengan sintaks 'find-fact', belum berhasil>
+# env.eval('(umur_fakultas (find-fact ((?f fakultas))(eq ?f:nama "Farmasi")))')
 
 env.run()
 
